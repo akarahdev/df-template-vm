@@ -23,7 +23,7 @@ object Playground {
             "item": {
               "id": "bl_tag",
               "data": {
-                "option": "False",
+                "option": "True",
                 "tag": "Is Hidden",
                 "action": "dynamic",
                 "block": "func"
@@ -33,25 +33,151 @@ object Playground {
           }
         ]
       },
-      "data": "test"
+      "data": "main"
     },
     {
       "id": "block",
-      "block": "call_func",
+      "block": "set_var",
       "args": {
         "items": [
           {
             "item": {
-              "id": "txt",
+              "id": "var",
               "data": {
-                "name": "test"
+                "name": "x",
+                "scope": "line"
               }
             },
             "slot": 0
+          },
+          {
+            "item": {
+              "id": "num",
+              "data": {
+                "name": "10"
+              }
+            },
+            "slot": 1
           }
         ]
       },
-      "data": "hostPrint"
+      "action": "="
+    },
+    {
+      "id": "block",
+      "block": "if_var",
+      "args": {
+        "items": [
+          {
+            "item": {
+              "id": "var",
+              "data": {
+                "name": "x",
+                "scope": "line"
+              }
+            },
+            "slot": 0
+          },
+          {
+            "item": {
+              "id": "num",
+              "data": {
+                "name": "5"
+              }
+            },
+            "slot": 1
+          }
+        ]
+      },
+      "action": ">="
+    },
+    {
+      "id": "bracket",
+      "direct": "open",
+      "type": "norm"
+    },
+    {
+      "id": "block",
+      "block": "control",
+      "args": {
+        "items": [
+          {
+            "item": {
+              "id": "comp",
+              "data": {
+                "name": "woahhh"
+              }
+            },
+            "slot": 0
+          },
+          {
+            "item": {
+              "id": "bl_tag",
+              "data": {
+                "option": "Developer",
+                "tag": "Permission",
+                "action": "PrintDebug",
+                "block": "control"
+              }
+            },
+            "slot": 22
+          },
+          {
+            "item": {
+              "id": "bl_tag",
+              "data": {
+                "option": "Add Spaces",
+                "tag": "Text Value Merging",
+                "action": "PrintDebug",
+                "block": "control"
+              }
+            },
+            "slot": 23
+          },
+          {
+            "item": {
+              "id": "bl_tag",
+              "data": {
+                "option": "None",
+                "tag": "Highlighting",
+                "action": "PrintDebug",
+                "block": "control"
+              }
+            },
+            "slot": 24
+          },
+          {
+            "item": {
+              "id": "bl_tag",
+              "data": {
+                "option": "Default",
+                "tag": "Sound",
+                "action": "PrintDebug",
+                "block": "control"
+              }
+            },
+            "slot": 25
+          },
+          {
+            "item": {
+              "id": "bl_tag",
+              "data": {
+                "option": "Debug",
+                "tag": "Message Style",
+                "action": "PrintDebug",
+                "block": "control"
+              }
+            },
+            "slot": 26
+          }
+        ]
+      },
+      "action": "PrintDebug"
+    },
+    {
+      "id": "bracket",
+      "direct": "close",
+      "type": "norm"
     }
   ]
 }
