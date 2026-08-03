@@ -7,7 +7,10 @@ import dev.akarah.action.setvar.num.SetVarDiv
 import dev.akarah.action.setvar.SetVarEquals
 import dev.akarah.action.setvar.num.SetVarMul
 import dev.akarah.action.setvar.num.SetVarSub
+import dev.akarah.action.setvar.str.SetVarRemoveString
+import dev.akarah.action.setvar.str.SetVarRepeatString
 import dev.akarah.action.setvar.str.SetVarReplaceString
+import dev.akarah.action.setvar.str.SetVarStringLength
 import dev.akarah.action.setvar.str.SetVarSubstring
 import dev.akarah.template.codeblock.CodeBlockType
 
@@ -15,7 +18,7 @@ object ActionRegistry {
     val actions: List<BaseAction> = listOf(
         SetVarEquals, SetVarAdd, SetVarSub, SetVarMul, SetVarDiv, ControlPrintDebug,
 
-        SetVarReplaceString, SetVarSubstring
+        SetVarReplaceString, SetVarSubstring, SetVarRemoveString, SetVarRepeatString, SetVarStringLength
     )
 
     val actionsByKeyed: Map<Pair<CodeBlockType, String>, BaseAction> =
