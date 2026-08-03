@@ -5,6 +5,6 @@ class ParameterSet(val parameters: List<ParameterNode>) {
     constructor(vararg parameters: ParameterNode) : this(parameters.toList())
 
     fun paramByIndex(index: Int): ParameterNode {
-        return this.parameters[index]
+        return this.parameters.find { it.slot == index } ?: throw Exception("Parameter at index $index not found")
     }
 }

@@ -6,6 +6,7 @@ import dev.akarah.interpreter.CompiledTemplate
 import dev.akarah.parsing.ParameterSet
 import dev.akarah.template.CodeTemplateData
 import dev.akarah.template.codeblock.CodeBlockType
+import dev.akarah.template.codeblock.ControlBlock
 import dev.akarah.template.codeblock.SetVariableBlock
 import dev.akarah.template.slot.SlotElementData
 
@@ -22,6 +23,11 @@ class TemplateCompiler {
             when(block) {
                 is SetVariableBlock -> {
                     val action = findAction(CodeBlockType.SET_VAR, block.action)
+                    compileParameters(action.parameters, block.slots, builder)
+                    this.builder.callExtern(action)
+                }
+                is ControlBlock -> {
+                    val action = findAction(CodeBlockType.CONTROL, block.action)
                     compileParameters(action.parameters, block.slots, builder)
                     this.builder.callExtern(action)
                 }

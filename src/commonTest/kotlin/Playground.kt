@@ -9,7 +9,7 @@ import kotlin.test.assertSame
 import kotlin.test.asserter
 
 object Playground {
-    val TEST_TEMPLATE = """
+    val TEST_TEMPLATE_2 = """
 {
   "blocks": [
     {
@@ -35,13 +35,19 @@ object Playground {
                   {
                     "id": "num",
                     "data": {
+                      "name": "10"
+                    }
+                  },
+                  {
+                    "id": "num",
+                    "data": {
                       "name": "15"
                     }
                   },
                   {
-                    "id": "txt",
+                    "id": "num",
                     "data": {
-                      "name": "lol"
+                      "name": "20"
                     }
                   }
                 ]
@@ -55,7 +61,7 @@ object Playground {
               "code_item": {
                 "id": "var",
                 "data": {
-                  "name": "meowkibby",
+                  "name": "adder",
                   "scope": "line"
                 }
               }
@@ -65,83 +71,36 @@ object Playground {
         ],
         "tree_version": 0
       },
-      "action": "CreateList"
+      "action": "+"
+    },
+    {
+      "id": "block",
+      "block": "control",
+      "slots": {
+        "elements": [
+          {
+            "id": "vararg",
+            "data": {
+              "selection": {
+                "mode": "CODE_ITEM",
+                "code_item": {
+                  "id": "var",
+                  "data": {
+                    "name": "adder",
+                    "scope": "line"
+                  }
+                }
+              }
+            },
+            "slot": 5
+          }
+        ],
+        "tree_version": 0
+      },
+      "action": "PrintDebug"
     }
   ]
 }
-    """.trimIndent()
-
-    @Test
-    fun testJsonParsing() {
-        val data = CodeTemplateData.parse(TEST_TEMPLATE)
-        println(data)
-    }
-
-    val TEST_TEMPLATE_2 = """
-        {
-          "blocks": [
-            {
-              "id": "block",
-              "block": "func",
-              "slots": {
-                "elements": [
-                  {
-                    "id": "singleton",
-                    "data": {
-                      "code_item": {
-                        "id": "bl_tag",
-                        "data": {
-                          "option": "False",
-                          "tag": "Is Hidden",
-                          "action": "dynamic",
-                          "block": "func"
-                        }
-                      }
-                    },
-                    "slot": 0
-                  }
-                ],
-                "tree_version": 0
-              },
-              "data": "main"
-            },
-            {
-              "id": "block",
-              "block": "set_var",
-              "slots": {
-                "elements": [
-                  {
-                    "id": "singleton",
-                    "data": {
-                      "code_item": {
-                        "id": "var",
-                        "data": {
-                          "name": "kibby",
-                          "scope": "line"
-                        }
-                      }
-                    },
-                    "slot": 0
-                  },
-                  {
-                    "id": "singleton",
-                    "data": {
-                      "code_item": {
-                        "id": "num",
-                        "data": {
-                          "name": "15"
-                        }
-                      }
-                    },
-                    "slot": 1
-                  }
-                ],
-                "tree_version": 1
-              },
-              "action": "="
-            }
-          ]
-        }
     """.trimIndent()
 
     @Test
@@ -152,24 +111,5 @@ object Playground {
         val ctx = ExecutorContext()
         val executor = CodeExecutor(ctx)
         executor.execute(compiled)
-    }
-
-
-    @Test
-    fun testBytecode() {
-        val bc = BytecodeBuilder()
-        bc.mov(0, DecimalLong(15))
-        bc.storeLineVar("kibby", 0)
-        bc.readLineVar("kibby", 1)
-        bc.readLineVar("kibby", 2)
-        bc.dumpRegisters()
-        bc._return()
-
-        val code = bc.build()
-
-        val ctx = ExecutorContext()
-        val executor = CodeExecutor(ctx)
-
-        executor.execute(code)
     }
 }

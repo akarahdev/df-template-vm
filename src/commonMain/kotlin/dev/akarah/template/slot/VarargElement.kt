@@ -14,11 +14,14 @@ data class VarargElement(val data: Data, override val slot: Int) : SlotElement {
         @Serializable
         data class Selection(
             val mode: PluralElementMode,
-            val items: List<VarItem>
+            val items: List<VarItem>? = null,
+            @SerialName("code_item")
+            val codeItem: VarItem? = null
         )
     }
 
     enum class PluralElementMode {
-        INLINED
+        INLINED,
+        CODE_ITEM
     }
 }

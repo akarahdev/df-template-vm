@@ -9,8 +9,8 @@ class CodeExecutor(val context: ExecutorContext) {
     @OptIn(ExperimentalUnsignedTypes::class)
     fun execute(code: CompiledTemplate) {
         val bytecode = code.bytes
-        val registers = arrayOfNulls<Any?>(10)
-        val lineVars = arrayOfNulls<Any?>(10)
+        val registers = arrayOfNulls<Any?>(128)
+        val lineVars = arrayOfNulls<Any?>(128)
         var pc = 0
         while(true) {
             when(bytecode[pc]) {
@@ -18,7 +18,8 @@ class CodeExecutor(val context: ExecutorContext) {
                 Opcodes.MOV_CONSTANT -> {
                     val registerIdx = bytecode[++pc]
                     val idx = bytecode[++pc]
-                    registers[registerIdx.toInt()] = code.constants[idx.toInt()]
+                    val constant = code.constants[idx.toInt()]
+                    registers[registerIdx.toInt()] = constant
                     pc++
                 }
                 Opcodes.DUMP_REGISTERS -> {
@@ -43,6 +44,20 @@ class CodeExecutor(val context: ExecutorContext) {
                         this,
                         registers,
                         lineVars
+                    )
+                    pc++
+                }
+                Opcodes.CREATE_VARARGS -> {
+                    val registerIdx = bytecode[++pc]
+                    registers[registerIdx.toInt()] = mutableListOf<Any?>()
+                    pc++
+                }
+                Opcodes.STORE_REGISTER_TO_VARARGS -> {
+                    val destVarargsRegister = bytecode[++pc]
+                    val srcContentRegister = bytecode[++pc]
+                    @Suppress("UNCHECKED_CAST")
+                    (registers[destVarargsRegister.toInt()] as MutableList<Any?>).add(
+                        registers[srcContentRegister.toInt()]
                     )
                     pc++
                 }

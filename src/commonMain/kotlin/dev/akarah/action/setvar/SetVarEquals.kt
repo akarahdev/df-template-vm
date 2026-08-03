@@ -5,10 +5,9 @@ import dev.akarah.interpreter.CodeExecutor
 import dev.akarah.parsing.ParameterNode
 import dev.akarah.parsing.ParameterSet
 import dev.akarah.parsing.ParameterType
-import dev.akarah.template.codeblock.CodeBlock
 import dev.akarah.template.codeblock.CodeBlockType
 
-object EqualsSetVar : ImperativeAction {
+object SetVarEquals : ImperativeAction {
     override val codeblock: CodeBlockType = CodeBlockType.SET_VAR
     override val name: String = "="
     override val parameters: ParameterSet
@@ -22,7 +21,6 @@ object EqualsSetVar : ImperativeAction {
         registers: Array<Any?>,
         lineVars: Array<Any?>
     ) {
-        println("Setting var ${registers[0]} to ${registers[1]}")
         lineVars[registers[0] as Int] = registers[1]
     }
 }
