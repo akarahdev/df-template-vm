@@ -7,6 +7,6 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable
 @JsonClassDiscriminator("block")
-sealed interface NormalBlock {
+sealed interface NormalBlock : CodeBlock {
 
 }

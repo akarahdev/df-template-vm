@@ -10,6 +10,6 @@ data class BracketBlock(
     @SerialName("direct")
     val direction: BracketDirection,
     val type: BracketType,
-) {
+) : CodeBlock {
 
 }

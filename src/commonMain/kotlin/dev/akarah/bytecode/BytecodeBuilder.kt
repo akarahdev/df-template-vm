@@ -1,10 +1,13 @@
 package dev.akarah.bytecode
 
+import dev.akarah.action.ActionRegistry
+import dev.akarah.action.kinds.BaseAction
 import dev.akarah.interpreter.CompiledTemplate
 
 class BytecodeBuilder {
     private val bytecode = mutableListOf<Byte>()
     private val constants = mutableListOf<Any?>()
+    private var lineVars = mutableMapOf<String, Int>()
 
     fun build(): CompiledTemplate = CompiledTemplate(
         bytecode.toByteArray(),
@@ -27,16 +30,28 @@ class BytecodeBuilder {
         bytecode.add(idx.toByte())
     }
 
-    fun storeLineVar(idx: Byte, register: Byte) {
-        bytecode.add(Opcodes.STORE_LINE_VAR_IDX)
-        bytecode.add(register)
-        bytecode.add(idx)
+    fun getLineVarIdx(name: String): Int {
+        if(!lineVars.containsKey(name)) {
+            lineVars[name] = lineVars.size
+        }
+        return lineVars[name]!!
     }
 
-    fun readLineVar(idx: Byte, register: Byte) {
+    fun storeLineVar(name: String, register: Byte) {
+        bytecode.add(Opcodes.STORE_LINE_VAR_IDX)
+        bytecode.add(register)
+        bytecode.add(getLineVarIdx(name).toByte())
+    }
+
+    fun readLineVar(name: String, register: Byte) {
         bytecode.add(Opcodes.LOAD_LINE_VAR_IDX)
         bytecode.add(register)
-        bytecode.add(idx)
+        bytecode.add(getLineVarIdx(name).toByte())
+    }
+
+    fun callExtern(action: BaseAction) {
+        bytecode.add(Opcodes.CALL_EXTERN)
+        bytecode.add(ActionRegistry.actionsByTypeToIndex[action]!!.toByte())
     }
 
     fun dumpRegisters() {

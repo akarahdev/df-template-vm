@@ -1,4 +1,5 @@
 import dev.akarah.bytecode.BytecodeBuilder
+import dev.akarah.bytecode.TemplateCompiler
 import dev.akarah.interpreter.CodeExecutor
 import dev.akarah.interpreter.ExecutorContext
 import dev.akarah.interpreter.values.DecimalLong
@@ -76,13 +77,91 @@ object Playground {
         println(data)
     }
 
+    val TEST_TEMPLATE_2 = """
+        {
+          "blocks": [
+            {
+              "id": "block",
+              "block": "func",
+              "slots": {
+                "elements": [
+                  {
+                    "id": "singleton",
+                    "data": {
+                      "code_item": {
+                        "id": "bl_tag",
+                        "data": {
+                          "option": "False",
+                          "tag": "Is Hidden",
+                          "action": "dynamic",
+                          "block": "func"
+                        }
+                      }
+                    },
+                    "slot": 0
+                  }
+                ],
+                "tree_version": 0
+              },
+              "data": "main"
+            },
+            {
+              "id": "block",
+              "block": "set_var",
+              "slots": {
+                "elements": [
+                  {
+                    "id": "singleton",
+                    "data": {
+                      "code_item": {
+                        "id": "var",
+                        "data": {
+                          "name": "kibby",
+                          "scope": "line"
+                        }
+                      }
+                    },
+                    "slot": 0
+                  },
+                  {
+                    "id": "singleton",
+                    "data": {
+                      "code_item": {
+                        "id": "num",
+                        "data": {
+                          "name": "15"
+                        }
+                      }
+                    },
+                    "slot": 1
+                  }
+                ],
+                "tree_version": 1
+              },
+              "action": "="
+            }
+          ]
+        }
+    """.trimIndent()
+
+    @Test
+    fun testCompilationPipeline() {
+        val template = CodeTemplateData.parse(TEST_TEMPLATE_2)
+        val compiled = TemplateCompiler.compile(template)
+
+        val ctx = ExecutorContext()
+        val executor = CodeExecutor(ctx)
+        executor.execute(compiled)
+    }
+
+
     @Test
     fun testBytecode() {
         val bc = BytecodeBuilder()
         bc.mov(0, DecimalLong(15))
-        bc.storeLineVar(0, 0)
-        bc.readLineVar(0, 1)
-        bc.readLineVar(0, 2)
+        bc.storeLineVar("kibby", 0)
+        bc.readLineVar("kibby", 1)
+        bc.readLineVar("kibby", 2)
         bc.dumpRegisters()
         bc._return()
 
