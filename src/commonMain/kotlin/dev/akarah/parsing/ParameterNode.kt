@@ -54,23 +54,28 @@ sealed interface ParameterNode {
     ) : ParameterNode {
         override fun parse(data: SlotElementData, bytecode: BytecodeBuilder) {
             val element = data.elements.find { it.slot == slot } as? VarargElement ?: return
-            bytecode.createVarargs(slot.toByte())
 
             when(element.data.selection.mode) {
                 VarargElement.PluralElementMode.INLINED -> {
-                    for(item in element.data.selection.items!!) {
-                        varItemToBytecode(item, 127, bytecode, type)
+                    var slotIdx = 0.toByte()
+                    bytecode.createVarargs(slot.toByte(), element.data.selection.items!!.size.toByte())
+                    for(item in element.data.selection.items) {
+                        varItemToBytecode(item, 12, bytecode, type)
                         bytecode.storeRegisterToVarargs(
                             slot.toByte(),
-                            127
+                            12,
+                            slotIdx
                         )
+                        slotIdx++
                     }
                 }
                 VarargElement.PluralElementMode.CODE_ITEM -> {
-                    varItemToBytecode(element.data.selection.codeItem!!, 127, bytecode, type)
+                    bytecode.createVarargs(slot.toByte(), 1.toByte())
+                    varItemToBytecode(element.data.selection.codeItem!!, 12, bytecode, type)
                     bytecode.storeRegisterToVarargs(
                         slot.toByte(),
-                        127
+                        12,
+                        0
                     )
                 }
             }

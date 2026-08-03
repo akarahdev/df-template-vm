@@ -9,8 +9,8 @@ class CodeExecutor(val context: ExecutorContext) {
     @OptIn(ExperimentalUnsignedTypes::class)
     fun execute(code: CompiledTemplate) {
         val bytecode = code.bytes
-        val registers = arrayOfNulls<Any?>(128)
-        val lineVars = arrayOfNulls<Any?>(128)
+        val registers = arrayOfNulls<Any?>(16)
+        val lineVars = arrayOfNulls<Any?>(16)
         var pc = 0
         while(true) {
             when(bytecode[pc]) {
@@ -49,16 +49,16 @@ class CodeExecutor(val context: ExecutorContext) {
                 }
                 Opcodes.CREATE_VARARGS -> {
                     val registerIdx = bytecode[++pc]
-                    registers[registerIdx.toInt()] = mutableListOf<Any?>()
+                    val size = bytecode[++pc]
+                    registers[registerIdx.toInt()] = arrayOfNulls<Any?>(size.toInt())
                     pc++
                 }
                 Opcodes.STORE_REGISTER_TO_VARARGS -> {
                     val destVarargsRegister = bytecode[++pc]
                     val srcContentRegister = bytecode[++pc]
+                    val idx = bytecode[++pc]
                     @Suppress("UNCHECKED_CAST")
-                    (registers[destVarargsRegister.toInt()] as MutableList<Any?>).add(
-                        registers[srcContentRegister.toInt()]
-                    )
+                    (registers[destVarargsRegister.toInt()] as Array<Any?>)[idx.toInt()] = registers[srcContentRegister.toInt()]
                     pc++
                 }
                 else -> throw UnsupportedOperationException("Unknown opcode: ${bytecode[pc]}")

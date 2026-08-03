@@ -22,7 +22,8 @@ object ControlPrintDebug : ImperativeAction {
         registers: Array<Any?>,
         lineVars: Array<Any?>
     ) {
-        val str = (registers[5] as List<Any?>).joinToString(" ")
+        @Suppress("UNCHECKED_CAST")
+        val str = (registers[5] as Array<Any?>).joinToString(" ")
         println(str)
     }
 }

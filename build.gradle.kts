@@ -23,7 +23,13 @@ kotlin {
     mingwX64()
     linuxX64()
     linuxArm64()
-    macosArm64()
+    macosArm64() {
+        binaries {
+            executable {
+                entryPoint = "main"
+            }
+        }
+    }
     wasmWasi() {
         nodejs()
     }

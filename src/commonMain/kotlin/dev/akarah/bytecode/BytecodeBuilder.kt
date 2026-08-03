@@ -54,15 +54,17 @@ class BytecodeBuilder {
         bytecode.add(ActionRegistry.actionsByTypeToIndex[action]!!.toByte())
     }
 
-    fun createVarargs(register: Byte) {
+    fun createVarargs(register: Byte, size: Byte) {
         bytecode.add(Opcodes.CREATE_VARARGS)
         bytecode.add(register)
+        bytecode.add(size)
     }
 
-    fun storeRegisterToVarargs(destVarargsRegister: Byte, srcContentRegister: Byte) {
+    fun storeRegisterToVarargs(destVarargsRegister: Byte, srcContentRegister: Byte, index: Byte) {
         bytecode.add(Opcodes.STORE_REGISTER_TO_VARARGS)
         bytecode.add(destVarargsRegister)
         bytecode.add(srcContentRegister)
+        bytecode.add(index)
     }
 
     fun dumpRegisters() {

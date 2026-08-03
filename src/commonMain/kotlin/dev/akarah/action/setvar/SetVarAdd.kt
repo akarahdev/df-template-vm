@@ -23,7 +23,8 @@ object SetVarAdd : ImperativeAction {
         lineVars: Array<Any?>
     ) {
         var out = DecimalLong(0)
-        for(value in registers[1] as List<Any?>) {
+        @Suppress("UNCHECKED_CAST")
+        for(value in registers[1] as Array<Any?>) {
             out += value as DecimalLong
         }
         lineVars[registers[0] as Int] = out
