@@ -3,5 +3,8 @@ package dev.akarah.interpreter
 import kotlin.jvm.JvmInline
 
 @JvmInline
-class CompiledTemplate(val bytes: ByteArray) {
+class CompiledTemplate(
+    val bytes: ByteArray,
+    val constants: Array<Any?> = emptyArray()
+) {
 }
