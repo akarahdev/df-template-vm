@@ -80,7 +80,9 @@ object Playground {
     fun testBytecode() {
         val bc = BytecodeBuilder()
         bc.mov(0, DecimalLong(15))
-        bc.mov(1, DecimalLong(30))
+        bc.storeLineVar(0, 0)
+        bc.readLineVar(0, 1)
+        bc.readLineVar(0, 2)
         bc.dumpRegisters()
         bc._return()
 

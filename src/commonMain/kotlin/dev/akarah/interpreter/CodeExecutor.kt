@@ -8,6 +8,7 @@ class CodeExecutor(val context: ExecutorContext) {
     fun execute(code: CompiledTemplate) {
         val bytecode = code.bytes
         val registers = arrayOfNulls<Any?>(10)
+        val lineVars = arrayOfNulls<Any?>(10)
         var pc = 0
         while(true) {
             when(bytecode[pc]) {
@@ -22,6 +23,19 @@ class CodeExecutor(val context: ExecutorContext) {
                     println(registers.contentToString() + "\n")
                     pc++
                 }
+                Opcodes.STORE_LINE_VAR_IDX -> {
+                    val registerIdx = bytecode[++pc]
+                    val varSlotIdx = bytecode[++pc]
+                    lineVars[varSlotIdx.toInt()] = registers[registerIdx.toInt()]
+                    pc++
+                }
+                Opcodes.LOAD_LINE_VAR_IDX -> {
+                    val registerIdx = bytecode[++pc]
+                    val varSlotIdx = bytecode[++pc]
+                    registers[registerIdx.toInt()] = lineVars[varSlotIdx.toInt()]
+                    pc++
+                }
+                else -> throw UnsupportedOperationException("Unknown opcode: ${bytecode[pc]}")
             }
         }
     }

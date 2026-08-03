@@ -27,6 +27,18 @@ class BytecodeBuilder {
         bytecode.add(idx.toByte())
     }
 
+    fun storeLineVar(idx: Byte, register: Byte) {
+        bytecode.add(Opcodes.STORE_LINE_VAR_IDX)
+        bytecode.add(register)
+        bytecode.add(idx)
+    }
+
+    fun readLineVar(idx: Byte, register: Byte) {
+        bytecode.add(Opcodes.LOAD_LINE_VAR_IDX)
+        bytecode.add(register)
+        bytecode.add(idx)
+    }
+
     fun dumpRegisters() {
         bytecode.add(Opcodes.DUMP_REGISTERS)
     }
