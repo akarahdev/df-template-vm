@@ -19,10 +19,10 @@ value class DecimalLong(val value: Long) {
     }
 
     operator fun times(other: DecimalLong): DecimalLong {
-        return DecimalLong(value * other.value / 1000)
+        return DecimalLong(value * other.value)
     }
 
     operator fun div(other: DecimalLong): DecimalLong {
-        return DecimalLong(value / other.value * 1000)
+        return DecimalLong(value * 1000 / other.value)
     }
 }
