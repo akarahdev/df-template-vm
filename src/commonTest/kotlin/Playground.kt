@@ -1,3 +1,6 @@
+import dev.akarah.bytecode.BytecodeBuilder
+import dev.akarah.interpreter.CodeExecutor
+import dev.akarah.interpreter.ExecutorContext
 import dev.akarah.template.CodeTemplateData
 import kotlin.test.Test
 
@@ -65,8 +68,20 @@ object Playground {
     """.trimIndent()
 
     @Test
-    fun test() {
+    fun testJsonParsing() {
         val data = CodeTemplateData.parse(TEST_TEMPLATE)
         println(data)
+    }
+
+    @Test
+    fun testBytecode() {
+        val bc = BytecodeBuilder()
+        bc._return()
+
+        val code = bc.build()
+
+        val ctx = ExecutorContext()
+        val executor = CodeExecutor(ctx)
+        executor.execute(code)
     }
 }
