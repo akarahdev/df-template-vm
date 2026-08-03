@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
-@SerialName("func")
-data class FunctionBlock(
-    val data: String,
+@SerialName("event")
+data class PlayerEventBlock(
+    val action: String,
     val slots: SlotElementData = SlotElementData(),
     val args: VarItemArgs = VarItemArgs()
 ) : NormalBlock {

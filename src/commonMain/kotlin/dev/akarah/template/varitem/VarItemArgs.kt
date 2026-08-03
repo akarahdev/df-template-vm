@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class VarItemArgs(
-    val items: List<SlotData>
+    val items: List<SlotData> = emptyList()
 ) {
     @Serializable
     data class SlotData(

@@ -1,5 +1,7 @@
 package dev.akarah.template.codeblock
 
+import dev.akarah.template.slot.SlotElement
+import dev.akarah.template.slot.SlotElementData
 import dev.akarah.template.varitem.VarItemArgs
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
@@ -10,7 +12,8 @@ import kotlinx.serialization.json.JsonClassDiscriminator
 @SerialName("call_func")
 data class CallFunctionBlock(
     val data: String,
-    val args: VarItemArgs
+    val slots: SlotElementData = SlotElementData(),
+    val args: VarItemArgs = VarItemArgs()
 ) : NormalBlock {
 
 }
