@@ -1,6 +1,8 @@
 @file:OptIn(ExperimentalWasmDsl::class)
 
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
+import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
 plugins {
     kotlin("multiplatform") version "2.4.10"
@@ -19,13 +21,15 @@ dependencies {
 }
 
 kotlin {
-    jvm()
+    jvm() {
+
+    }
     mingwX64()
     linuxX64()
     linuxArm64()
     macosArm64() {
         binaries {
-            executable {
+            executable(listOf(NativeBuildType.DEBUG, NativeBuildType.RELEASE)) {
                 entryPoint = "main"
             }
         }
@@ -48,5 +52,25 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
+
+        val jvmMain by getting {
+            dependencies {
+                implementation(kotlin("stdlib"))
+            }
+        }
     }
+}
+
+
+
+tasks.register<JavaExec>("runJvm") {
+    group = "application"
+    description = "Runs the Kotlin/JVM application"
+
+    mainClass.set("MainKt")
+
+    val jvmTarget = kotlin.targets.getByName("jvm") as KotlinJvmTarget
+    val compilation = jvmTarget.compilations.getByName("main")
+
+    classpath = compilation.output.allOutputs + compilation.runtimeDependencyFiles
 }

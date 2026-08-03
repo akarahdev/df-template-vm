@@ -1,4 +1,4 @@
-package dev.akarah.action.setvar
+package dev.akarah.action.setvar.num
 
 import dev.akarah.action.kinds.ImperativeAction
 import dev.akarah.interpreter.CodeExecutor
@@ -6,15 +6,15 @@ import dev.akarah.interpreter.values.DecimalLong
 import dev.akarah.parsing.ParameterNode
 import dev.akarah.parsing.ParameterSet
 import dev.akarah.parsing.ParameterType
-import dev.akarah.template.codeblock.CodeBlock
 import dev.akarah.template.codeblock.CodeBlockType
 
-object ControlPrintDebug : ImperativeAction {
-    override val codeblock: CodeBlockType = CodeBlockType.CONTROL
-    override val name: String = "PrintDebug"
+object SetVarSub : ImperativeAction {
+    override val codeblock: CodeBlockType = CodeBlockType.SET_VAR
+    override val name: String = "-"
     override val parameters: ParameterSet
         get() = ParameterSet(
-            ParameterNode.Varargs(5, ParameterType.ANY)
+            ParameterNode.Singleton(0, ParameterType.VARIABLE),
+            ParameterNode.Varargs(1, ParameterType.NUMBER)
         )
 
     override fun execute(
@@ -23,6 +23,11 @@ object ControlPrintDebug : ImperativeAction {
         lineVars: Array<Any?>
     ) {
         @Suppress("UNCHECKED_CAST")
-        val str = (registers[5] as Array<Any?>).joinToString(" ")
+        val inpArr = registers[1] as Array<Any?>
+        var out = inpArr[0] as DecimalLong
+        for(i in 1 until inpArr.size) {
+            out += inpArr[i] as DecimalLong
+        }
+        lineVars[registers[0] as Int] = out
     }
 }

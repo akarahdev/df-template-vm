@@ -6,6 +6,10 @@ import kotlin.jvm.JvmInline
 value class DecimalLong(val value: Long) {
     constructor(value: Double) : this(value.toLong() * 1000)
 
+    fun toInt(): Int {
+        return (value / 1000).toInt()
+    }
+
     override fun toString(): String {
         return value.toString().replaceFirst(".000", "")
     }
